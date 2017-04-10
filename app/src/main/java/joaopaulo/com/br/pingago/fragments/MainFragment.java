@@ -39,8 +39,8 @@ public class MainFragment extends Fragment  implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     private GoogleMap mMap;
     private MarkerOptions localizacaoUsuario;
-    private EditText editTextBuscarPorCEP;
 
+    private Localizacao_lista_fragmento lfragmento;
     // TODO: Rename and change types of parameters
 
 
@@ -69,21 +69,45 @@ public class MainFragment extends Fragment  implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_main, container,false);
 
-        editTextBuscarPorCEP = (EditText) view.findViewById(R.id.editTextBuscarPorCEP);
-        editTextBuscarPorCEP.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_DOWN && event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(editTextBuscarPorCEP.getWindowToken(),0);
-                    updateMapaPorCEP(Integer.parseInt(editTextBuscarPorCEP.getText().toString()));
-                }
-                return true;
-            }
-        });
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        lfragmento = (Localizacao_lista_fragmento) getActivity()
+                .getSupportFragmentManager()
+                .findFragmentById(R.id.container_lista_locais);
+        if (lfragmento == null){
+            lfragmento = Localizacao_lista_fragmento.newInstance();
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container_lista_locais,lfragmento)
+                    .commit();
+
+        }
+        final EditText editTextBuscarPorCEP = (EditText) view.findViewById(R.id.editTextBuscarPorCEP);
+        editTextBuscarPorCEP.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && keyCode == KeyEvent.KEYCODE_ENTER) {
+
+                    
+                    String text = editTextBuscarPorCEP.getText().toString();
+                    int cep = Integer.parseInt(text);
+
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(editTextBuscarPorCEP.getWindowToken(), 0);
+
+                    mostrarLista();
+                    updateMapaPorCEP(cep);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        esconderLista();
         return  view;
     }
     @Override
@@ -105,8 +129,9 @@ public class MainFragment extends Fragment  implements OnMapReadyCallback {
             if(cep.contains("-")){
                 cep = cep.split("-")[0]+cep.split("-")[1];
             }
-            int zip = Integer.parseInt(cep);
-            updateMapaPorCEP(zip);
+            int cepsenviar = Integer.parseInt(cep);
+            updateMapaPorCEP(cepsenviar);
+
         } catch (IOException exception){
 
         }
@@ -128,5 +153,13 @@ public class MainFragment extends Fragment  implements OnMapReadyCallback {
             mMap.addMarker(local);
 
         }
+    }
+
+    private  void esconderLista(){
+        getActivity().getSupportFragmentManager().beginTransaction().hide(lfragmento).commit();
+    }
+
+    private  void mostrarLista(){
+        getActivity().getSupportFragmentManager().beginTransaction().show(lfragmento).commit();
     }
 }

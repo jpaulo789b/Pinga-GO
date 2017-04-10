@@ -10,6 +10,7 @@ public class PingaGo {
     private String localizacaoTitulo;
     private String localizacaoEndereco;
     private String localizacaoImagemURL;
+    private final String DRAWABLE = "drawable/";
 
     public PingaGo(float longitude, float latitude, String localizacaoTitulo, String localizacaoEndereco, String localizacaoImagemURL) {
         this.longitude = longitude;
@@ -17,6 +18,10 @@ public class PingaGo {
         this.localizacaoTitulo = localizacaoTitulo;
         this.localizacaoEndereco = localizacaoEndereco;
         this.localizacaoImagemURL = localizacaoImagemURL;
+    }
+
+    public String getImagemURI(){
+        return DRAWABLE+localizacaoImagemURL;
     }
 
     public float getLongitude() {

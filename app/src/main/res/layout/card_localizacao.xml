@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tituloLocal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="JPSA"
+                android:textColor="#000"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/enderecoDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:text="Alguma descrição "
+                android:textColor="#5c5b5b"
+                android:textSize="16dp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/localizacaoImagem"
+            android:layout_width="50dp"
+            android:layout_height="80dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/slo" />
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

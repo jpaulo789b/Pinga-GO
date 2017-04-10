@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import joaopaulo.com.br.pingago.R;
+import joaopaulo.com.br.pingago.fragments.Localizacao_lista_fragmento;
 import joaopaulo.com.br.pingago.fragments.MainFragment;
 
 public class MapsActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
@@ -32,6 +33,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.On
     private GoogleApiClient mGoogleApi;
     private MainFragment mainFragment;
     public final  int LOCALIZACAO_INDICADOR = 2727;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
