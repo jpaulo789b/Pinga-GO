@@ -1,11 +1,17 @@
 package joaopaulo.com.br.pingago.fragments;
 
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,7 +21,10 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import joaopaulo.com.br.pingago.R;
 import joaopaulo.com.br.pingago.modelo.PingaGo;
@@ -30,6 +39,7 @@ public class MainFragment extends Fragment  implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     private GoogleMap mMap;
     private MarkerOptions localizacaoUsuario;
+    private EditText editTextBuscarPorCEP;
 
     // TODO: Rename and change types of parameters
 
@@ -59,6 +69,18 @@ public class MainFragment extends Fragment  implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_main, container,false);
 
+        editTextBuscarPorCEP = (EditText) view.findViewById(R.id.editTextBuscarPorCEP);
+        editTextBuscarPorCEP.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(event.getAction() == KeyEvent.ACTION_DOWN && event.getAction() == KeyEvent.KEYCODE_ENTER){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(editTextBuscarPorCEP.getWindowToken(),0);
+                    updateMapaPorCEP(Integer.parseInt(editTextBuscarPorCEP.getText().toString()));
+                }
+                return true;
+            }
+        });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -67,23 +89,30 @@ public class MainFragment extends Fragment  implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-16,49);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Goiânia"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     public void setLocalizacaoUsuario(LatLng posicao){
+
         if (localizacaoUsuario == null){
             localizacaoUsuario = new MarkerOptions().position(posicao).title("Minha posição Atual");
             mMap.addMarker(localizacaoUsuario);
 
-        }else{
+        }
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(posicao.latitude,posicao.longitude, 1);
+            String cep = addresses.get(0).getPostalCode().toString();
+            if(cep.contains("-")){
+                cep = cep.split("-")[0]+cep.split("-")[1];
+            }
+            int zip = Integer.parseInt(cep);
+            updateMapaPorCEP(zip);
+        } catch (IOException exception){
 
         }
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(posicao,15));
-        updateMapaPorCEP(0);
+
     }
 
     private void updateMapaPorCEP(int cep){

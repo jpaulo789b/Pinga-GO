@@ -38,15 +38,18 @@
                     android:src="@drawable/search" />
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/editTextBuscarPorCEP"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_weight="1"
-                    android:hint="Digite um CEP" />
+                    android:hint="Digite um CEP"
+                    android:inputType="number" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
+
+
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -55,6 +58,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context="joaopaulo.com.br.pingago.activitys.MapsActivity" />
+        <FrameLayout
+            android:id="@+id/container_lista_locais"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true">
+
+        </FrameLayout>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/floatingActionButton"
